@@ -67,7 +67,7 @@
                             Baru</label>
                         <input type="file" name="image_path[]" id="image_path" multiple
                             class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-indigo-200" />
-                        <p class="text-sm text-gray-500 mt-1">Boleh pilih lebih dari satu gambar.</p>
+                        <p class="text-sm text-gray-500 mt-1">Maksimal 3 gambar!!</p>
                     </div>
 
                     <div class="mb-4">
@@ -93,8 +93,6 @@
 
                         </div>
                     </div>
-
-
 
                     <div class="flex space-x-3">
                         <button type="submit" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded">

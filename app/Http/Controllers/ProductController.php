@@ -112,7 +112,7 @@ class ProductController extends Controller
             'status' => 'required|in:tersedia,terjual',
             'phone' => 'required|string|max:20',
             'category_id' => 'required|exists:hakim_categories,id',
-            'images_path' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'images_path.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
         $product->update([
