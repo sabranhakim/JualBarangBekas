@@ -1,81 +1,115 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Tambah Produk') }}
+        <h2 class="font-semibold text-2xl text-indigo-800 leading-tight">
+            {{ __(request()->routeIs('products.edit', $product ?? null) ? 'Edit Produk' : 'Tambah Produk') }}
         </h2>
     </x-slot>
 
-    <div class="py-6">
-        <div class="max-w-2xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white p-6 shadow-md rounded-lg">
-                <form action="{{ route('products.store') }}" method="POST" enctype="multipart/form-data">
-                    @csrf
+    <div class="py-8 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-3xl mx-auto bg-white p-6 sm:p-8 rounded-2xl shadow-lg ">
+            <form action="{{ request()->routeIs('products.edit', $product ?? null) ? route('products.update', $product) : route('products.store') }}"
+                method="POST" enctype="multipart/form-data" class="space-y-6">
 
-                    <div class="mb-4">
-                        <label for="name" class="block text-sm font-medium text-gray-700">Nama Produk</label>
-                        <input type="text" name="name" id="name" value="{{ old('name') }}" required
-                               class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring focus:ring-indigo-200" />
-                    </div>
+                @csrf
+                @if(request()->routeIs('products.edit', $product ?? null))
+                    @method('PUT')
+                @endif
 
-                    <div class="mb-4">
-                        <label for="category_id" class="block text-sm font-medium text-gray-700">Kategori</label>
-                        <select name="category_id" id="category_id" required
-                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring focus:ring-indigo-200">
-                            <option value="">-- Pilih Kategori --</option>
-                            @foreach($categories as $c)
-                                <option value="{{ $c->id }}" {{ old('category_id') == $c->id ? 'selected' : '' }}>
-                                    {{ $c->category_name }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
+                {{-- Nama Produk --}}
+                <div>
+                    <label for="name" class="block text-sm font-semibold text-gray-700 mb-1 text-indigo-700">Nama Produk</label>
+                    <input type="text" name="name" id="name" value="{{ old('name', $product->name ?? '') }}" required
+                        class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-300 focus:outline-none shadow-sm text-sm" />
+                    @error('name')
+                        <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
 
-                    <div class="mb-4">
-                        <label for="description" class="block text-sm font-medium text-gray-700">Deskripsi</label>
-                        <textarea name="description" id="description" rows="3" required
-                                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring focus:ring-indigo-200">{{ old('description') }}</textarea>
-                    </div>
+                {{-- Kategori --}}
+                <div>
+                    <label for="category_id" class="block text-sm font-semibold text-gray-700 mb-1 text-indigo-700">Kategori</label>
+                    <select name="category_id" id="category_id" required
+                        class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-300 focus:outline-none shadow-sm text-sm">
+                        <option value="">-- Pilih Kategori --</option>
+                        @foreach ($categories as $c)
+                            <option value="{{ $c->id }}" {{ old('category_id', $product->category_id ?? '') == $c->id ? 'selected' : '' }}>
+                                {{ $c->category_name }}
+                            </option>
+                        @endforeach
+                    </select>
+                    @error('category_id')
+                        <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
 
-                    <div class="mb-4">
-                        <label for="price" class="block text-sm font-medium text-gray-700">Harga</label>
-                        <input type="number" name="price" id="price" required
-                               class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring focus:ring-indigo-200" />
-                    </div>
+                {{-- Deskripsi --}}
+                <div>
+                    <label for="description" class="block text-sm font-semibold text-gray-700 mb-1 text-indigo-700">Deskripsi</label>
+                    <textarea name="description" id="description" rows="4" required
+                        class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-300 focus:outline-none shadow-sm resize-none text-sm">{{ old('description', $product->description ?? '') }}</textarea>
+                    @error('description')
+                        <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
 
-                    <div class="mb-4">
-                        <label for="status" class="block text-sm font-medium text-gray-700">Status</label>
-                        <select name="status" id="status"
-                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring focus:ring-indigo-200">
-                            <option value="tersedia">Tersedia</option>
-                            <option value="terjual">Terjual</option>
-                        </select>
-                    </div>
+                {{-- Harga --}}
+                <div>
+                    <label for="price" class="block text-sm font-semibold text-gray-700 mb-1 text-indigo-700">Harga</label>
+                    <input type="number" name="price" id="price" value="{{ old('price', $product->price ?? '') }}" required
+                        class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-300 focus:outline-none shadow-sm text-sm" />
+                    @error('price')
+                        <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
 
-                    <div class="mb-4">
-                        <label for="phone" class="block text-gray-700">Nomor WhatsApp / HP</label>
-                        <input type="number" name="phone" id="phone" required
-                               class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring focus:ring-indigo-200" />
-                    </div>
+                {{-- Status --}}
+                <div>
+                    <label for="status" class="block text-sm font-semibold text-gray-700 mb-1 text-indigo-700">Status</label>
+                    <select name="status" id="status" required
+                        class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-300 focus:outline-none shadow-sm text-sm">
+                        <option value="tersedia" {{ (old('status', $product->status ?? '') == 'tersedia') ? 'selected' : '' }}>Tersedia</option>
+                        <option value="terjual" {{ (old('status', $product->status ?? '') == 'terjual') ? 'selected' : '' }}>Terjual</option>
+                    </select>
+                    @error('status')
+                        <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
 
-                    <div class="mb-4">
-                        <label for="images" class="block text-sm font-medium text-gray-700">Upload Gambar</label>
-                        <input type="file" name="image_path[]" id="images" multiple accept="image/*" onchange="if(this.files.length > 3){ alert('Maksimal hanya 3 gambar.'); this.value=''; }
-                               class="mt-1 block w-full text-sm text-gray-500 file:bg-indigo-50 file:border file:border-gray-300 file:rounded file:px-4 file:py-2 file:text-sm file:font-semibold file:text-indigo-600 hover:file:bg-indigo-100" />
-                    </div>
+                {{-- Nomor Telepon --}}
+                <div>
+                    <label for="phone" class="block text-sm font-semibold text-gray-700 mb-1 text-indigo-700">Nomor WhatsApp / HP</label>
+                    <input type="text" name="phone" id="phone" value="{{ old('phone', $product->phone ?? '') }}" required
+                        class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-indigo-300 focus:outline-none shadow-sm text-sm" />
+                    @error('phone')
+                        <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
 
+                {{-- Upload Gambar --}}
+                <div>
+                    <label for="image_path" class="block text-sm font-semibold text-gray-700 mb-1 text-indigo-700">{{ request()->routeIs('products.edit', $product ?? null) ? 'Tambah Gambar Baru' : 'Upload Gambar' }}</label>
+                    <input type="file" name="image_path[]" id="image_path" multiple accept="image/*"
+                        class="block w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4
+                        file:rounded-lg file:border-0 file:text-sm file:font-semibold
+                        file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100" />
+                    <p class="text-xs text-gray-500 mt-1">Maksimal 3 gambar. Format: JPG, PNG.</p>
+                    @error('image_path')
+                        <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
 
-                    <div class="flex space-x-3">
-                        <button type="submit"
-                                class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded">
-                            Simpan
-                        </button>
-                        <a href="{{ route('products.index') }}"
-                           class="bg-gray-400 hover:bg-gray-500 text-white px-4 py-2 rounded">
-                            Batal
-                        </a>
-                    </div>
-                </form>
-            </div>
+                {{-- Tombol --}}
+                <div class="flex flex-col sm:flex-row justify-end gap-3 pt-2">
+                    <a href="{{ route('products.index') }}"
+                        class="inline-block bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium px-5 py-2 rounded-lg transition text-sm">
+                        Batal
+                    </a>
+                    <button type="submit"
+                        class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-5 py-2 rounded-lg shadow transition text-sm">
+                        {{ request()->routeIs('products.edit', $product ?? null) ? 'Update Produk' : 'Simpan Produk' }}
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 </x-app-layout>

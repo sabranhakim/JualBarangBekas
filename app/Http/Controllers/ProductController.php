@@ -57,15 +57,15 @@ class ProductController extends Controller
             'category_id' => 'required|exists:hakim_categories,id',
             'status' => 'required|in:tersedia,terjual',
             'phone' => 'required|string|max:20',
-            'images_path' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048', // sesuai name input
+            'image_path.*' => 'image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048', // sesuai name input
         ]);
 
         // Batasi jumlah gambar maksimal 3
-        if (count($request->file('images_path') ?? []) > 3) {
-            return back()
-                ->withErrors(['images_path' => 'Maksimal 3 gambar yang diperbolehkan.'])
-                ->withInput();
-        }
+        // if (count($request->file('image_path') ?? []) > 3) {
+        //     return back()
+        //         ->withErrors(['image_path' => 'Maksimal 3 gambar yang diperbolehkan.'])
+        //         ->withInput();
+        // }
 
         $product = Product::create([
             'user_id' => Auth::id(),
@@ -77,7 +77,7 @@ class ProductController extends Controller
             'phone' => $request->phone,
         ]);
 
-        // Proses simpan gambar
+        // // Proses simpan gambar
         if ($request->hasFile('image_path')) {
             foreach ($request->file('image_path') as $file) {
                 $path = $file->store('products', 'public');
@@ -86,6 +86,7 @@ class ProductController extends Controller
                 ]);
             }
         }
+
 
         // Tambahkan di ProductController::store()
         // dd($request->file('image_path'));
@@ -103,7 +104,9 @@ class ProductController extends Controller
 
     public function update(Request $request, Product $product)
     {
+        // dd($request->all());
         $this->authorize('update', $product);
+
 
         $request->validate([
             'name' => 'required|string|max:100',
@@ -112,7 +115,7 @@ class ProductController extends Controller
             'status' => 'required|in:tersedia,terjual',
             'phone' => 'required|string|max:20',
             'category_id' => 'required|exists:hakim_categories,id',
-            'images_path.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'image_path.*' => 'image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
         ]);
 
         $product->update([
@@ -124,8 +127,13 @@ class ProductController extends Controller
             'category_id' => $request->category_id,
         ]);
 
-        // Tambah gambar baru (tidak hapus gambar lama)
         if ($request->hasFile('image_path')) {
+            // Validasi hanya jika file dikirim
+            $request->validate([
+                'image_path.*' => 'image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
+            ]);
+
+            // Simpan gambar baru
             foreach ($request->file('image_path') as $file) {
                 $path = $file->store('products', 'public');
                 $product->images()->create([
@@ -133,6 +141,8 @@ class ProductController extends Controller
                 ]);
             }
         }
+
+
 
         return redirect()->route('products.index')->with('success', 'Produk berhasil diperbarui.');
     }

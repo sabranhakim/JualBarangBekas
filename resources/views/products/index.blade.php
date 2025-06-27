@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Dashboard Produk') }}
+        <h2 class="font-semibold text-xl text-indigo-800 leading-tight">
+            {{ __('Product') }}
         </h2>
     </x-slot>
 
@@ -41,13 +41,7 @@
 
                 <div class="flex justify-between items-center mb-6">
                     <h3 class="text-lg font-bold">Produk Saya</h3>
-                    <a href="{{ route('products.create') }}"
-                        class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">
-                        + Tambah Produk
-                    </a>
                 </div>
-
-
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-10">
                     @forelse ($products->where('user_id', auth()->id()) as $product)
@@ -70,5 +64,14 @@
                 <x-product-modal />
             </div>
         </div>
+        <a href="{{ route('products.create') }}"
+            class="fixed bottom-10 right-10 bg-blue-600 hover:bg-blue-700 text-white p-4 rounded-full shadow-lg z-50"
+            title="Tambah Produk">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+            </svg>
+        </a>
+
     </div>
 </x-app-layout>
