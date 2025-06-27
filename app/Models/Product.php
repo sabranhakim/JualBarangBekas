@@ -10,9 +10,7 @@ class Product extends Model
 {
     protected $table = 'hakim_products';
 
-    protected $fillable = [
-        'user_id', 'category_id', 'name', 'description', 'price', 'status', 'phone'
-    ];
+    protected $fillable = ['user_id', 'category_id', 'name', 'description', 'price', 'status', 'phone'];
 
     public function user()
     {
@@ -28,5 +26,9 @@ class Product extends Model
     {
         return $this->hasMany(ProductImage::class);
     }
-}
 
+    public function favoredBy()
+    {
+        return $this->belongsToMany(User::class, 'hakim_favorites')->withTimestamps();
+    }
+}

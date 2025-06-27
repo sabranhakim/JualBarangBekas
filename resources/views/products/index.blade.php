@@ -64,14 +64,27 @@
                 <x-product-modal />
             </div>
         </div>
+        {{-- Floating Wishlist Button --}}
+        <a href="{{ route('favorites.index') }}"
+            class="fixed bottom-25 md:bottom-32
+ right-6 sm:bottom-28 sm:right-8 bg-pink-500 hover:bg-pink-600 text-white px-4 py-3 rounded-full shadow-lg flex items-center space-x-2 z-50 transition transform hover:scale-105">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
+                <path
+                    d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" />
+            </svg>
+            <span class="hidden sm:inline text-sm font-semibold">Wishlist</span>
+        </a>
+
+        {{-- Floating Tambah Produk Button --}}
         <a href="{{ route('products.create') }}"
-            class="fixed bottom-10 right-10 bg-blue-600 hover:bg-blue-700 text-white p-4 rounded-full shadow-lg z-50"
+            class="fixed bottom-10 right-6 sm:right-8 bg-blue-600 hover:bg-blue-700 text-white p-4 rounded-full shadow-lg z-50 flex items-center space-x-2 transition transform hover:scale-105"
             title="Tambah Produk">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
                 stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
             </svg>
         </a>
+
 
     </div>
 </x-app-layout>

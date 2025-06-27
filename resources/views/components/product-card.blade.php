@@ -1,11 +1,11 @@
 @props(['product'])
 
-<div class="border rounded-2xl shadow-md hover:shadow-2xl transition duration-300 ease-in-out bg-white overflow-hidden flex flex-col hover:-translate-y-1 hover:scale-[1.01] transform">
+<div
+    class="border rounded-2xl shadow-md hover:shadow-2xl transition duration-300 ease-in-out bg-white overflow-hidden flex flex-col hover:-translate-y-1 hover:scale-[1.01] transform">
     {{-- Gambar Produk --}}
     <div class="w-full h-52 sm:h-64 bg-gray-100 overflow-hidden relative group">
         @if ($product->images->count())
-            <img src="{{ asset('storage/' . $product->images->first()->image_path) }}"
-                alt="{{ $product->name }}"
+            <img src="{{ asset('storage/' . $product->images->first()->image_path) }}" alt="{{ $product->name }}"
                 class="object-cover w-full h-full transition-transform duration-500 group-hover:scale-110">
         @else
             <div class="flex items-center justify-center h-full text-gray-400 italic">Tidak ada gambar</div>
@@ -15,11 +15,33 @@
         <div class="absolute top-2 left-2 bg-white text-green-700 font-bold text-ml px-3 py-1 rounded-lg shadow">
             Rp {{ number_format($product->price, 0, ',', '.') }}
         </div>
+        @auth
+            <form method="POST" action="{{ route('favorites.toggle', $product) }}" class="absolute top-2 right-2 z-10">
+                @csrf
+                <button type="submit">
+                    @if (auth()->user()->favorites->contains($product->id))
+                        <svg class="w-6 h-6 text-red-500 hover:text-red-600" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd"
+                                d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"
+                                clip-rule="evenodd" />
+                        </svg>
+                    @else
+                        <svg class="w-6 h-6 text-gray-400 hover:text-red-500" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd"
+                                d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"
+                                clip-rule="evenodd" />
+                        </svg>
+                    @endif
+                </button>
+            </form>
+        @endauth
+
     </div>
 
     {{-- Informasi Produk --}}
     <div class="p-4 flex flex-col flex-1">
-        <h3 class="text-lg font-semibold text-gray-800 mb-1 truncate transition-all duration-300 group-hover:text-blue-700">
+        <h3
+            class="text-lg font-semibold text-gray-800 mb-1 truncate transition-all duration-300 group-hover:text-blue-700">
             {{ $product->name }}
         </h3>
         <p class="text-sm text-gray-500 mb-1">{{ $product->category->category_name ?? '-' }}</p>

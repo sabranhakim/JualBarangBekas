@@ -18,9 +18,9 @@ return new class extends Migration
 
 public function down()
 {
-    Schema::table('hakim_products', function (Blueprint $table) {
-        $table->dropColumn('phone');
-    });
+    // Schema::table('hakim_products', function (Blueprint $table) {
+    //     $table->dropColumn('phone');
+    // });
 }
 
 };

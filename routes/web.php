@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\DashboardController;
 
 // ==================
@@ -40,6 +41,10 @@ Route::middleware('auth')->group(function () {
     Route::put('/products/{product}', [ProductController::class, 'update'])->name('products.update');
     Route::delete('/products/{product}', [ProductController::class, 'destroy'])->name('products.destroy');
     Route::delete('/product-images/{image}', [ProductController::class, 'deleteImage'])->name('product-images.destroy');
+
+    //favorites
+    Route::get('/wishlist', [FavoriteController::class, 'index'])->name('favorites.index')->middleware('auth');
+    Route::post('/favorites/{product}', [FavoriteController::class, 'toggle'])->name('favorites.toggle');
 
     // KATEGORI (admin/user login saja)
     Route::get('/categories', [CategoryController::class, 'index'])->name('categories.index');
