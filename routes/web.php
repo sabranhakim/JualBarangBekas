@@ -4,43 +4,44 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CategoryController;
-
-Route::get('/', function () {
-    return redirect()->route('login');
-});
-
 use App\Http\Controllers\DashboardController;
 
-Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth'])->name('dashboard');
+// ==================
+// ROUTE UMUM (Public)
+// ==================
 
+Route::get('/', fn() => redirect()->route('products.public.index'));
+
+
+// PUBLIC
+Route::get('/products-public', [ProductController::class, 'showAll'])->name('products.public.index');
+Route::get('/products-public/{product}', [ProductController::class, 'show'])->name('products.public.show');
+
+
+// ======================
+// ROUTE YANG BUTUH LOGIN
+// ======================
 
 Route::middleware('auth')->group(function () {
+    // DASHBOARD pribadi (jika memang perlu)
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+    // PROFILE user
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-});
 
-// Tampilkan daftar produk
-Route::get('/products', [ProductController::class, 'index'])->name('products.index');
+    // PRODUK (admin/user login saja)
 
-// Form tambah produk
-Route::get('/products/create', [ProductController::class, 'create'])->name('products.create');
-Route::middleware(['auth'])->group(function () {
-    // Simpan produk baru
+    Route::get('/products', [ProductController::class, 'index'])->name('products.index');
+    Route::get('/products/create', [ProductController::class, 'create'])->name('products.create');
     Route::post('/products', [ProductController::class, 'store'])->name('products.store');
-
-    // Form edit produk
     Route::get('/products/{product}/edit', [ProductController::class, 'edit'])->name('products.edit');
+    Route::put('/products/{product}', [ProductController::class, 'update'])->name('products.update');
+    Route::delete('/products/{product}', [ProductController::class, 'destroy'])->name('products.destroy');
     Route::delete('/product-images/{image}', [ProductController::class, 'deleteImage'])->name('product-images.destroy');
 
-    // Update produk
-    Route::put('/products/{product}', [ProductController::class, 'update'])->name('products.update');
-
-    // Hapus produk
-    Route::delete('/products/{product}', [ProductController::class, 'destroy'])->name('products.destroy');
-});
-
-Route::middleware(['auth'])->group(function () {
+    // KATEGORI (admin/user login saja)
     Route::get('/categories', [CategoryController::class, 'index'])->name('categories.index');
     Route::get('/categories/create', [CategoryController::class, 'create'])->name('categories.create');
     Route::post('/categories', [CategoryController::class, 'store'])->name('categories.store');

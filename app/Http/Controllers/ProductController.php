@@ -13,6 +13,25 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 class ProductController extends Controller
 {
     use AuthorizesRequests;
+
+    public function showAll()
+    {
+        $products = Product::with(['category', 'images'])
+            ->latest()
+            ->get();
+
+        return view('products.show', compact('products'));
+    }
+
+    public function show()
+    {
+        $products = Product::with(['category', 'images'])
+            ->latest()
+            ->get();
+
+        return view('products.show', compact('products'));
+    }
+
     // Tampilkan semua produk
     public function index(Request $request)
     {
@@ -87,7 +106,6 @@ class ProductController extends Controller
             }
         }
 
-
         // Tambahkan di ProductController::store()
         // dd($request->file('image_path'));
 
@@ -106,7 +124,6 @@ class ProductController extends Controller
     {
         // dd($request->all());
         $this->authorize('update', $product);
-
 
         $request->validate([
             'name' => 'required|string|max:100',
@@ -141,8 +158,6 @@ class ProductController extends Controller
                 ]);
             }
         }
-
-
 
         return redirect()->route('products.index')->with('success', 'Produk berhasil diperbarui.');
     }

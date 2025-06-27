@@ -58,10 +58,6 @@
                    class="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-3 rounded-lg shadow text-center">
                     + Tambah Produk
                 </a>
-                <a href="{{ route('products.index') }}"
-                   class="bg-gray-100 hover:bg-gray-200 text-gray-800 px-5 py-3 rounded-lg shadow text-center">
-                    Lihat Semua Produk
-                </a>
             </div>
 
             {{-- Footer --}}
