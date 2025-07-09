@@ -32,30 +32,43 @@
             </a>
 
             <a href="{{ route('login') }}"
-                class="text-sm bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-md shadow-sm transition">
+                class="text-sm bg-indigo-600 hover:bg-indigo-800 text-white px-4 py-2 rounded-md shadow-sm transition">
                 Login untuk Jualan
             </a>
         </div>
     </header>
 
     <!-- Hero -->
-    <section class="bg-green-100 py-8">
+    <section class="bg-indigo-100 py-8">
         <div class="max-w-7xl mx-auto px-4 text-center">
-            <h1 class="text-3xl font-bold text-green-800 mb-2">Temukan Barang Bekas Berkualitas</h1>
-            <p class="text-gray-700 text-sm">Beli barang second dengan harga terbaik dari penjual terpercaya</p>
+            <h1 class="text-3xl font-bold text-indigo-800 mb-2">Temukan Barang Bekas Berkualitas</h1>
+            <p class="text-gray-700 font-bold text-sm">Beli barang second dengan harga terbaik dari penjual terpercaya
+            </p>
         </div>
     </section>
 
     <!-- Produk -->
     <main class="max-w-7xl mx-auto px-4 py-8">
-        <h2 class="text-xl font-semibold mb-6">Produk Terbaru</h2>
+        <h2 class="text-xl font-semibold mb-6 text-indigo-600">Produk Terbaru</h2>
 
-        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
+        <!-- Search Bar -->
+        <form method="GET" action="" class="mb-8">
+            <div class="flex flex-col sm:flex-row gap-2">
+                <input type="text" name="q" placeholder="Cari produk..." value="{{ request('q') }}"
+                    class="w-full sm:flex-1 px-4 py-2 border-2 border-indigo-600 rounded-lg shadow-sm focus:ring focus:ring-indigo-100 focus:border-indigo-600 transition">
+                <button type="submit"
+                    class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg shadow transition font-semibold">
+                    Cari
+                </button>
+            </div>
+        </form>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
             @forelse ($products as $product)
-                <div class="bg-white rounded-lg shadow hover:shadow-lg transition overflow-hidden flex flex-col cursor-pointer"
+                <div class="bg-white rounded-xl shadow-lg hover:shadow-xl transition overflow-hidden flex flex-col cursor-pointer border-2 border-indigo-100 hover:border-indigo-600 min-h-[420px]"
                     @click="selectedProduct = {{ $product->load('category', 'images')->toJson() }}; showDetail = true">
 
-                    <div class="h-40 bg-gray-100">
+                    <div class="h-56 bg-gray-100">
                         @if ($product->images->count())
                             <img src="{{ asset('storage/' . $product->images->first()->image_path) }}"
                                 alt="{{ $product->name }}" class="w-full h-full object-cover">
@@ -66,10 +79,17 @@
                         @endif
                     </div>
 
-                    <div class="p-3 flex flex-col flex-1">
-                        <h3 class="text-sm font-semibold line-clamp-2 mb-1">{{ $product->name }}</h3>
-                        <p class="text-xs text-gray-500">{{ $product->category->category_name ?? '-' }}</p>
-                        <p class="text-green-700 font-bold text-sm mt-auto">Rp {{ number_format($product->price, 0, ',', '.') }}</p>
+                    <div class="p-4 flex flex-col flex-1">
+                        <h3 class="text-base font-bold line-clamp-2 mb-1 text-indigo-600">{{ $product->name }}</h3>
+                        <p class="text-xs text-gray-500 mb-2">{{ $product->category->category_name ?? '-' }}</p>
+                        <p class="text-gray-700 text-sm mb-2 line-clamp-2">{{ Str::limit($product->description, 80) }}
+                        </p>
+                        <div class="mt-auto flex items-center justify-between">
+                            <span class="text-indigo-700 font-bold text-lg">Rp
+                                {{ number_format($product->price, 0, ',', '.') }}</span>
+                            <span
+                                class="text-xs px-2 py-1 rounded bg-indigo-50 text-indigo-600">{{ $product->status }}</span>
+                        </div>
                     </div>
                 </div>
             @empty
@@ -89,36 +109,49 @@
                     <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
                         <template x-if="selectedProduct?.images?.length">
                             <template x-for="img in selectedProduct.images" :key="img.id">
-                                <img :src="'/storage/' + img.image_path"
-                                    class="w-full h-40 object-cover rounded shadow" alt="Gambar">
+                                <img :src="'/storage/' + img.image_path" class="w-full h-40 object-cover rounded shadow"
+                                    alt="Gambar">
                             </template>
                         </template>
-                        <p x-show="!selectedProduct?.images?.length"
-                            class="text-gray-500 italic col-span-full">Tidak ada gambar.</p>
+                        <p x-show="!selectedProduct?.images?.length" class="text-gray-500 italic col-span-full">Tidak
+                            ada gambar.</p>
                     </div>
                 </div>
 
                 <!-- Detail -->
-                <div class="flex-1">
-                    <h3 class="text-lg font-semibold text-gray-700 mb-1">Deskripsi Produk</h3>
-                    <p class="text-gray-700 mb-4 whitespace-pre-line" x-text="selectedProduct?.description"></p>
+                <div class="flex-1 bg-white p-6 rounded-lg shadow-lg">
+                    <h3 class="text-xl font-bold text-gray-800 mb-4 border-b pb-2 border-gray-200">Deskripsi Produk</h3>
 
-                    <p><span class="font-semibold">Kategori:</span> <span
-                            x-text="selectedProduct?.category?.category_name ?? '-'"></span></p>
-                    <p><span class="font-semibold">Harga:</span> Rp <span
-                            x-text="Number(selectedProduct?.price).toLocaleString()"></span></p>
-                    <p><span class="font-semibold">Status:</span> <span
-                            x-text="selectedProduct?.status"></span></p>
-                    <p><span class="font-semibold">Kontak:</span> <span
-                            x-text="selectedProduct?.phone ?? '-'"></span></p>
+                    <p class="text-gray-700 mb-6 whitespace-pre-line" x-text="selectedProduct?.description"></p>
 
-                    <div class="mt-6 text-right">
-                        <button class="bg-gray-600 hover:bg-gray-700 text-white px-5 py-2 rounded"
+                    <div class="space-y-2">
+                        <p>
+                            <span class="font-semibold text-indigo-600">Kategori:</span>
+                            <span x-text="selectedProduct?.category?.category_name ?? '-'"></span>
+                        </p>
+                        <p>
+                            <span class="font-semibold text-indigo-600">Harga:</span>
+                            Rp <span x-text="Number(selectedProduct?.price).toLocaleString()"></span>
+                        </p>
+                        <p>
+                            <span class="font-semibold text-indigo-600">Status:</span>
+                            <span x-text="selectedProduct?.status"></span>
+                        </p>
+                        <p>
+                            <span class="font-semibold text-indigo-600">Kontak:</span>
+                            <span x-text="selectedProduct?.phone ?? '-'"></span>
+                        </p>
+                    </div>
+
+                    <div class="mt-8 text-right">
+                        <button
+                            class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2 rounded-lg shadow transition duration-200"
                             @click="showDetail = false">
                             Tutup
                         </button>
                     </div>
                 </div>
+
             </div>
         </div>
     </div>

@@ -14,13 +14,21 @@ class ProductController extends Controller
 {
     use AuthorizesRequests;
 
-    public function showAll()
+    public function showAll(Request $request)
     {
-        $products = Product::with(['category', 'images'])
-            ->latest()
-            ->get();
+        // ambil query pencarian dari URL (?q=...)
+        $q = $request->query('q');
 
-        return view('products.show', compact('products'));
+        $productsQuery = Product::with(['category', 'images'])
+            ->latest();
+
+        if (!empty($q)) {
+            $productsQuery->where('name', 'like', '%' . $q . '%');
+        }
+
+        $products = $productsQuery->get();
+
+        return view('products.show', compact('products', 'q'));
     }
 
     public function show()
