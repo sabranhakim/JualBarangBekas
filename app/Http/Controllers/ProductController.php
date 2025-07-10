@@ -16,19 +16,53 @@ class ProductController extends Controller
 
     public function showAll(Request $request)
     {
-        // ambil query pencarian dari URL (?q=...)
+        // Ambil query dari URL
         $q = $request->query('q');
+        $categoryId = $request->query('category');
 
-        $productsQuery = Product::with(['category', 'images'])
-            ->latest();
+        $productsQuery = Product::with(['category', 'images'])->latest();
 
         if (!empty($q)) {
             $productsQuery->where('name', 'like', '%' . $q . '%');
         }
 
+        if (!empty($categoryId)) {
+            $productsQuery->where('category_id', $categoryId);
+        }
+
         $products = $productsQuery->get();
 
-        return view('products.show', compact('products', 'q'));
+        // Kirim juga data kategori ke view untuk dropdown
+        $categories = Category::all();
+
+        return view('products.show', compact('products', 'q', 'categoryId', 'categories'));
+    }
+
+    public function myProducts(Request $request)
+    {
+        $q = $request->query('q');
+        $categoryId = $request->query('category');
+
+        $query = Product::with(['category', 'images'])->latest();
+
+        if (Auth::user()->role !== 'admin') {
+            // kalau bukan admin, hanya tampilkan produk milik user
+            $query->where('user_id', Auth::id());
+        }
+
+        if (!empty($q)) {
+            $query->where('name', 'like', '%' . $q . '%');
+        }
+
+        if (!empty($categoryId)) {
+            $query->where('category_id', $categoryId);
+        }
+
+        $products = $query->get();
+
+        $categories = Category::all();
+
+        return view('products.my-products', compact('products', 'q', 'categoryId', 'categories'));
     }
 
     public function show()
@@ -187,6 +221,6 @@ class ProductController extends Controller
     public function destroy(Product $product)
     {
         $product->delete();
-        return redirect()->route('products.index')->with('success', 'Produk berhasil dihapus.');
+        return redirect()->route('products.my')->with('success', 'Produk berhasil dihapus.');
     }
 }

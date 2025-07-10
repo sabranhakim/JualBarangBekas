@@ -49,7 +49,7 @@
 
     <!-- Produk -->
     <main class="max-w-7xl mx-auto px-4 py-8">
-        <h2 class="text-xl font-semibold mb-6 text-indigo-600">Produk Terbaru</h2>
+        <h2 class="text-xl font-semibold mb-6 text-indigo-600">Temukan Produk yang kamu inginkan</h2>
 
         <!-- Search Bar -->
         <form method="GET" action="" class="mb-8">
@@ -88,7 +88,11 @@
                             <span class="text-indigo-700 font-bold text-lg">Rp
                                 {{ number_format($product->price, 0, ',', '.') }}</span>
                             <span
-                                class="text-xs px-2 py-1 rounded bg-indigo-50 text-indigo-600">{{ $product->status }}</span>
+                                class="text-xs px-2 py-1 rounded
+                                    {{ $product->status == 'tersedia' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' }}">
+                                {{ $product->status }}
+                            </span>
+
                         </div>
                     </div>
                 </div>

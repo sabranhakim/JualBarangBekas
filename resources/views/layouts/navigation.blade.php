@@ -12,16 +12,27 @@
 
             <!-- Desktop Navigation -->
             <div class="hidden sm:flex sm:items-center sm:space-x-6">
-                <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                    {{ __('Dashboard') }}
+                @if (Auth::user()->role === 'admin')
+                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+                        {{ __('Dashboard') }}
+                    </x-nav-link>
+                @endif
+
+                <x-nav-link :href="route('products.index')" :active="request()->routeIs('products.index')">
+                    {{ __('Products') }}
                 </x-nav-link>
-                <x-nav-link :href="route('products.index')" :active="request()->routeIs('products.*')">
-                    {{ __('Product') }}
+
+                <x-nav-link :href="route('products.my')" :active="request()->routeIs('products.my')">
+                    {{ __('My Products') }}
                 </x-nav-link>
-                <x-nav-link :href="route('categories.index')" :active="request()->routeIs('categories.*')">
-                    {{ __('Category') }}
-                </x-nav-link>
+
+                @if (Auth::user()->role === 'admin')
+                    <x-nav-link :href="route('categories.index')" :active="request()->routeIs('categories.*')">
+                        {{ __('Category') }}
+                    </x-nav-link>
+                @endif
             </div>
+
 
             <!-- Settings Dropdown -->
             <div class="hidden sm:flex sm:items-center">

@@ -17,7 +17,7 @@
             {{-- Ringkasan Statistik --}}
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
                 <div class="bg-white p-5 rounded-lg shadow text-center">
-                    <div class="text-sm text-gray-500">Total Produk Saya</div>
+                    <div class="text-sm text-gray-500">Total Produk</div>
                     <div class="text-2xl font-bold text-indigo-600">{{ $myProductCount }}</div>
                 </div>
                 <div class="bg-white p-5 rounded-lg shadow text-center">

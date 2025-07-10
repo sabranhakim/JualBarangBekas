@@ -41,6 +41,7 @@ Route::middleware('auth')->group(function () {
     Route::put('/products/{product}', [ProductController::class, 'update'])->name('products.update');
     Route::delete('/products/{product}', [ProductController::class, 'destroy'])->name('products.destroy');
     Route::delete('/product-images/{image}', [ProductController::class, 'deleteImage'])->name('product-images.destroy');
+    Route::get('/my-products', [ProductController::class, 'myProducts'])->name('products.my');
 
     //favorites
     Route::get('/wishlist', [FavoriteController::class, 'index'])->name('favorites.index')->middleware('auth');

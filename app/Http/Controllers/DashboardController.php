@@ -14,8 +14,8 @@ class DashboardController extends Controller
         $user = Auth::user();
 
         return view('dashboard', [
-            'myProductCount' => Product::where('user_id', $user->id)->count(),
-            'soldCount' => Product::where('user_id', $user->id)->where('status', 'terjual')->count(),
+            'myProductCount' => Product::count(),
+            'soldCount' => Product::where('status', 'terjual')->count(),
             'userCount' => User::count(),
             'categoryCount' => Category::count(),
             'latestProducts' => Product::with('category')->latest()->take(6)->get(),
