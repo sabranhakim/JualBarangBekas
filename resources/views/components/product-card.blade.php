@@ -37,6 +37,7 @@
         @endauth
 
     </div>
+    
 
     {{-- Informasi Produk --}}
     <div class="p-4 flex flex-col flex-1">
@@ -60,22 +61,6 @@
                 class="bg-blue-600 hover:bg-blue-700 text-white text-sm px-4 py-2 rounded-lg text-center w-full sm:w-auto transform hover:scale-105 transition">
                 Detail
             </button>
-
-            {{-- @can('update', $product)
-                <a href="{{ route('products.edit', $product) }}"
-                    class="bg-yellow-400 hover:bg-yellow-500 text-white text-sm px-4 py-2 rounded-lg text-center w-full sm:w-auto transform hover:scale-105 transition">
-                    Edit
-                </a>
-                <form action="{{ route('products.destroy', $product) }}" method="POST"
-                    onsubmit="return confirm('Hapus produk?')" class="w-full sm:w-auto">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit"
-                        class="bg-red-500 hover:bg-red-600 text-white text-sm px-4 py-2 rounded-lg w-full sm:w-auto transform hover:scale-105 transition">
-                        Hapus
-                    </button>
-                </form>
-            @endcan --}}
         </div>
     </div>
 </div>

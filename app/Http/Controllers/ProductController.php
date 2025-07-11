@@ -40,9 +40,6 @@ class ProductController extends Controller
 
     public function myProducts(Request $request)
     {
-        $q = $request->query('q');
-        $categoryId = $request->query('category');
-
         $query = Product::with(['category', 'images'])->latest();
 
         if (Auth::user()->role !== 'admin') {
@@ -50,24 +47,17 @@ class ProductController extends Controller
             $query->where('user_id', Auth::id());
         }
 
-        if (!empty($q)) {
-            $query->where('name', 'like', '%' . $q . '%');
-        }
-
-        if (!empty($categoryId)) {
-            $query->where('category_id', $categoryId);
-        }
-
-        $products = $query->get();
+        $products = $query->paginate(15)->withQueryString();
 
         $categories = Category::all();
 
-        return view('products.my-products', compact('products', 'q', 'categoryId', 'categories'));
+        return view('products.my-products', compact('products', 'categories'));
     }
 
     public function show()
     {
         $products = Product::with(['category', 'images'])
+            ->paginate(12)
             ->latest()
             ->get();
 
@@ -77,14 +67,16 @@ class ProductController extends Controller
     // Tampilkan semua produk
     public function index(Request $request)
     {
-        $query = Product::with(['category', 'images']);
+        $q = $request->query('q');
+        $categoryId = $request->query('category');
 
-        // Filter berdasarkan kategori
-        if ($request->filled('category')) {
-            $query->where('category_id', $request->category);
-        }
+        $query = Product::with(['category', 'images'])
+            ->latest()
+            ->when($q, fn($q2) => $q2->where('name', 'like', '%' . $q . '%'))
+            ->when($categoryId, fn($q3) => $q3->where('category_id', $categoryId));
 
-        $products = $query->latest()->get();
+        $products = $query->paginate(16)->withQueryString();
+
         $categories = Category::all();
 
         return view('products.index', compact('products', 'categories'));

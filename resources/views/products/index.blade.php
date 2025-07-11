@@ -63,6 +63,10 @@
                         </p>
                     @endforelse
                 </div>
+                {{-- Pagination --}}
+                <div class="mt-6">
+                    {{ $products->links() }}
+                </div>
 
                 <x-product-modal />
             </div>
@@ -77,6 +81,6 @@
             </svg>
             <span class="hidden sm:inline text-sm font-semibold">Wishlist</span>
         </a>
-        
+
     </div>
 </x-app-layout>
