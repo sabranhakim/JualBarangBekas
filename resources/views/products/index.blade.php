@@ -57,7 +57,7 @@
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                     @forelse ($products as $product)
-                        <x-product-card :product="$product" />
+                    <x-product-card :product="$product" :is-own="$product->user_id === auth()->id()" />
                     @empty
                         <p class="col-span-full text-center text-gray-500 italic">Belum ada produk dari pengguna lain.
                         </p>

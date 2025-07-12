@@ -1,4 +1,4 @@
-@props(['product'])
+@props(['product', 'isOwn' => false])
 
 <div
     class="border bg-white rounded-xl shadow-lg hover:shadow-xl transition overflow-hidden flex flex-col cursor-pointer border-2 border-indigo-100 hover:border-indigo-600 min-h-[420px]">
@@ -9,6 +9,13 @@
                 class="object-cover w-full h-full transition-transform duration-500 group-hover:scale-110">
         @else
             <div class="flex items-center justify-center h-full text-gray-400 italic">Tidak ada gambar</div>
+        @endif
+
+        {{-- Badge Milikku --}}
+        @if ($isOwn)
+            <div class="absolute top-12 left-2 bg-green-500 text-white font-bold text-xs px-2 py-1 rounded shadow">
+                My product
+            </div>
         @endif
 
         {{-- Lencana Harga di Sudut --}}
@@ -37,7 +44,7 @@
         @endauth
 
     </div>
-    
+
 
     {{-- Informasi Produk --}}
     <div class="p-4 flex flex-col flex-1">
@@ -61,6 +68,7 @@
                 class="bg-blue-600 hover:bg-blue-700 text-white text-sm px-4 py-2 rounded-lg text-center w-full sm:w-auto transform hover:scale-105 transition">
                 Detail
             </button>
+
         </div>
     </div>
 </div>
