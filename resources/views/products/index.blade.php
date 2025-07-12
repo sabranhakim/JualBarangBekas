@@ -5,7 +5,8 @@
         </h2>
     </x-slot>
 
-    <div x-data="{ showDetail: false, selectedProduct: null }" @show-product.window="selectedProduct = $event.detail; showDetail = true" class="py-6">
+    <div x-data="{ showDetail: false, selectedProduct: null, showFeedback: false }" @show-product.window="selectedProduct = $event.detail; showDetail = true" class="py-6"
+        lang="id">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg p-4">
 
@@ -57,7 +58,7 @@
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                     @forelse ($products as $product)
-                    <x-product-card :product="$product" :is-own="$product->user_id === auth()->id()" />
+                        <x-product-card :product="$product" :is-own="$product->user_id === auth()->id()" />
                     @empty
                         <p class="col-span-full text-center text-gray-500 italic">Belum ada produk dari pengguna lain.
                         </p>
@@ -81,6 +82,50 @@
             </svg>
             <span class="hidden sm:inline text-sm font-semibold">Wishlist</span>
         </a>
+        <!-- Feedback -->
+        <button @click="showFeedback = true"
+            class="fixed bottom-20 md:bottom-12 left-6 sm:bottom-28 sm:left-8 bg-blue-500 hover:bg-blue-600 text-white px-4 py-3 rounded-full shadow-lg flex items-center space-x-2 z-50 transition transform hover:scale-105">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M2 5a2 2 0 012-2h12a2 2 0 012 2v10a2 2 0 01-2 2H5.414l-3.707 3.707A1 1 0 010 19V5z" />
+            </svg>
+            <span class="hidden sm:inline text-sm font-semibold">Feedback</span>
+        </button>
 
+        <!-- Modal Feedback -->
+        <div x-show="showFeedback" x-transition @click.self="showFeedback = false"
+            class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 px-4" x-cloak>
+            <div class="bg-white rounded-lg shadow-lg max-w-lg w-full p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-lg font-bold text-indigo-700">Kirim Feedback</h3>
+                    <button @click="showFeedback = false" class="text-gray-500 hover:text-gray-700">
+                        ✖
+                    </button>
+                </div>
+
+                <form method="POST" action="{{ route('feedback.store') }}" class="space-y-4">
+                    @csrf
+                    @guest
+                        <input type="text" name="name" placeholder="Nama" required
+                            class="w-full px-3 py-2 border border-gray-300 rounded text-sm" />
+                        <input type="email" name="email" placeholder="Email" required
+                            class="w-full px-3 py-2 border border-gray-300 rounded text-sm" />
+                    @endguest
+                    <textarea name="message" placeholder="Pesan / Saran" rows="4" required
+                        class="w-full px-3 py-2 border border-gray-300 rounded text-sm"></textarea>
+
+                    <div class="flex justify-end gap-2">
+                        <button type="button" @click="showFeedback = false"
+                            class="px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded text-sm">
+                            Batal
+                        </button>
+                        <button type="submit"
+                            class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded text-sm shadow">
+                            Kirim
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
+
 </x-app-layout>
