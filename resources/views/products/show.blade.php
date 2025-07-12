@@ -31,6 +31,12 @@
                 <span class="text-xl sm:text-2xl font-semibold text-gray-800">BarangBekas</span>
             </a>
 
+            <nav class="space-x-4 hidden md:flex font-bold">
+                <a href="#categories" class="hover:text-indigo-600">Kategori</a>
+                <a href="#products" class="hover:text-indigo-600">Produk</a>
+                <a href="#testimoni" class="hover:text-indigo-600">Testimoni</a>
+            </nav>
+
             <a href="{{ route('login') }}"
                 class="text-sm bg-indigo-600 hover:bg-indigo-800 text-white px-4 py-2 rounded-md shadow-sm transition">
                 Login untuk Jualan
@@ -47,8 +53,24 @@
         </div>
     </section>
 
+    <!-- Section Kategori -->
+    <section id="categories" class="py-12 bg-white">
+        <div class="max-w-7xl mx-auto px-4">
+            <h2 class="text-2xl font-bold text-indigo-600 mb-6">Kategori Populer</h2>
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+                @forelse($categories as $category)
+                    <div class="bg-indigo-50 text-center py-4 px-2 rounded shadow hover:bg-indigo-100 transition">
+                        <h3 class="text-lg font-semibold text-indigo-700">{{ $category->category_name }}</h3>
+                    </div>
+                @empty
+                    <p class="col-span-full text-gray-500 italic">Belum ada kategori tersedia.</p>
+                @endforelse
+            </div>
+        </div>
+    </section>
+
     <!-- Produk -->
-    <main class="max-w-7xl mx-auto px-4 py-8">
+    <main id="products" class="max-w-7xl mx-auto px-4 py-8">
         <h2 class="text-xl font-semibold mb-6 text-indigo-600">Temukan Produk yang kamu inginkan</h2>
 
         <!-- Search Bar -->
@@ -100,6 +122,10 @@
                 <p class="col-span-full text-gray-500 italic">Tidak ada produk tersedia saat ini.</p>
             @endforelse
         </div>
+        {{-- Pagination --}}
+        {{-- <div class="mt-6">
+            {{ $products->links() }}
+        </div> --}}
     </main>
 
     <!-- Modal Detail Produk -->
@@ -161,9 +187,15 @@
     </div>
 
     <!-- Footer -->
-    <footer class="bg-white border-t mt-8">
-        <div class="max-w-7xl mx-auto px-4 py-4 text-center text-sm text-gray-500">
-            &copy; {{ date('Y') }} JualBarangBekas. All rights reserved.
+    <footer id="contact" class="bg-indigo-600 text-white mt-12">
+        <div class="max-w-7xl mx-auto px-4 py-6 flex flex-col md:flex-row justify-between items-center space-y-2 md:space-y-0">
+            <p>&copy; {{ date('Y') }} JualBarangBekas. All rights reserved.</p>
+            <div class="space-x-4">
+                <a href="#" class="hover:underline">Kebijakan Privasi</a>
+                <a href="#" class="hover:underline">Syarat & Ketentuan</a>
+                <a href="#categories" class="hover:underline">Kategori</a>
+                <a href="#products" class="hover:underline">Produk</a>
+            </div>
         </div>
     </footer>
 

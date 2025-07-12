@@ -9,17 +9,17 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 class CategoryController extends Controller
 {
     use AuthorizesRequests;
-
     // Tampilkan semua kategori
     public function index()
     {
         $this->authorize('viewAny', Category::class);
 
-        $categories = Category::all();
+        $categories = Category::latest()->get();
+
         return view('categories.index', compact('categories'));
     }
 
-    // Form tambah kategori
+    // Tampilkan form tambah kategori
     public function create()
     {
         $this->authorize('create', Category::class);
@@ -27,23 +27,22 @@ class CategoryController extends Controller
         return view('categories.create');
     }
 
-    // Simpan kategori
+    // Simpan kategori baru
     public function store(Request $request)
     {
         $this->authorize('create', Category::class);
 
-        $request->validate([
-            'name' => 'required|string|max:100|unique:hakim_categories,name',
+        $validated = $request->validate([
+            'category_name' => 'required|string|max:100|unique:hakim_categories,category_name',
         ]);
 
-        Category::create([
-            'name' => $request->name,
-        ]);
+        Category::create($validated);
 
-        return redirect()->route('categories.index')->with('success', 'Kategori berhasil ditambahkan.');
+        return redirect()->route('categories.index')
+            ->with('success', 'Kategori berhasil ditambahkan.');
     }
 
-    // Form edit kategori
+    // Tampilkan form edit kategori
     public function edit(Category $category)
     {
         $this->authorize('update', $category);
@@ -56,15 +55,14 @@ class CategoryController extends Controller
     {
         $this->authorize('update', $category);
 
-        $request->validate([
-            'name' => 'required|string|max:100|unique:hakim_categories,name,' . $category->id,
+        $validated = $request->validate([
+            'category_name' => 'required|string|max:100|unique:hakim_categories,category_name,' . $category->id,
         ]);
 
-        $category->update([
-            'name' => $request->name,
-        ]);
+        $category->update($validated);
 
-        return redirect()->route('categories.index')->with('success', 'Kategori berhasil diperbarui.');
+        return redirect()->route('categories.index')
+            ->with('success', 'Kategori berhasil diperbarui.');
     }
 
     // Hapus kategori
@@ -74,6 +72,7 @@ class CategoryController extends Controller
 
         $category->delete();
 
-        return redirect()->route('categories.index')->with('success', 'Kategori berhasil dihapus.');
+        return redirect()->route('categories.index')
+            ->with('success', 'Kategori berhasil dihapus.');
     }
 }

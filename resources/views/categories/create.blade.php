@@ -13,7 +13,7 @@
 
                     <div class="mb-4">
                         <label for="name" class="block text-sm font-medium text-gray-700">Nama Kategori</label>
-                        <input type="text" name="name" id="name" required
+                        <input type="text" name="category_name" id="category_name" required
                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring focus:ring-indigo-200 focus:ring-opacity-50" />
                     </div>
 

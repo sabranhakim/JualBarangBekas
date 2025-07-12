@@ -18,13 +18,42 @@
                     </x-nav-link>
                 @endif
 
-                <x-nav-link :href="route('products.index')" :active="request()->routeIs('products.index')">
-                    {{ __('Products') }}
-                </x-nav-link>
+                @if (Auth::user()->role === 'admin')
+                    <!-- Products Dropdown -->
+                    <div x-data="{ open: false }" class="relative">
+                        <button @click="open = !open" type="button"
+                            class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-indigo-600 focus:outline-none">
+                            {{ __('Products') }}
+                            <svg class="ml-1 h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd"
+                                    d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.08 1.04l-4.25 4.25a.75.75 0 01-1.08 0L5.21 8.27a.75.75 0 01.02-1.06z"
+                                    clip-rule="evenodd" />
+                            </svg>
+                        </button>
 
-                <x-nav-link :href="route('products.my')" :active="request()->routeIs('products.my')">
-                    {{ __('My Products') }}
-                </x-nav-link>
+                        <div x-show="open" @click.away="open = false" x-transition
+                            class="absolute mt-2 w-40 bg-white rounded shadow-lg z-50">
+                            <a href="{{ route('products.index') }}"
+                                class="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50
+                {{ request()->routeIs('products.index') ? 'bg-indigo-100' : '' }}">
+                                {{ __('All Products') }}
+                            </a>
+                            <a href="{{ route('products.my') }}"
+                                class="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-50
+                {{ request()->routeIs('products.my') ? 'bg-indigo-100' : '' }}">
+                                {{ __('My Products') }}
+                            </a>
+                        </div>
+                    </div>
+                @elseif(Auth::user()->role === 'user')
+                    <x-nav-link :href="route('products.index')" :active="request()->routeIs('products.index')">
+                        {{ __('Products') }}
+                    </x-nav-link>
+
+                    <x-nav-link :href="route('products.my')" :active="request()->routeIs('products.my')">
+                        {{ __('My Products') }}
+                    </x-nav-link>
+                @endif
 
                 @if (Auth::user()->role === 'admin')
                     <x-nav-link :href="route('categories.index')" :active="request()->routeIs('categories.*')">
@@ -87,10 +116,13 @@
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('products.index')" :active="request()->routeIs('products.*')">
+            <x-responsive-nav-link :href="route('products.index')" :active="request()->routeIs('products.index')">
                 {{ __('Product') }}
             </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('categories.index')" :active="request()->routeIs('categories.*')">
+            <x-responsive-nav-link :href="route('products.my')" :active="request()->routeIs('products.my')">
+                {{ __('My Product') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('categories.index')" :active="request()->routeIs('categories.')">
                 {{ __('Category') }}
             </x-responsive-nav-link>
         </div>

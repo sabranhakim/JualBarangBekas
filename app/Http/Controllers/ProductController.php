@@ -30,7 +30,7 @@ class ProductController extends Controller
             $productsQuery->where('category_id', $categoryId);
         }
 
-        $products = $productsQuery->get();
+        $products = $productsQuery->paginate(8)->withQueryString();
 
         // Kirim juga data kategori ke view untuk dropdown
         $categories = Category::all();
@@ -75,7 +75,7 @@ class ProductController extends Controller
             ->when($q, fn($q2) => $q2->where('name', 'like', '%' . $q . '%'))
             ->when($categoryId, fn($q3) => $q3->where('category_id', $categoryId));
 
-        $products = $query->paginate(16)->withQueryString();
+        $products = $query->paginate(12)->withQueryString();
 
         $categories = Category::all();
 

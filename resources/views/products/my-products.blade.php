@@ -48,20 +48,39 @@
                                         @endif
                                     </td>
 
-                                    <td class="px-4 py-2 space-x-2">
+                                    <td class="px-4 py-2 space-x-2 flex items-center">
                                         <a href="{{ route('products.edit', $product) }}"
-                                            class="px-2 py-1 text-xs bg-yellow-400 hover:bg-yellow-500 text-white rounded">Edit</a>
+                                            class="inline-flex items-center gap-1 px-2 py-1 text-xs bg-yellow-400 hover:bg-yellow-500 text-white rounded">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M11 5h2m-1-1v2m-4 4h8m2 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+
+                                        </a>
+
                                         <form action="{{ route('products.destroy', $product) }}" method="POST" class="inline">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" onclick="return confirm('Yakin hapus produk ini?')"
-                                                class="px-2 py-1 text-xs bg-red-500 hover:bg-red-600 text-white rounded">Hapus</button>
+                                                class="inline-flex items-center gap-1 px-2 py-1 text-xs bg-red-500 hover:bg-red-600 text-white rounded">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                        d="M6 18L18 6M6 6l12 12" />
+                                                </svg>
+
+                                            </button>
                                         </form>
+
                                         <button @click="showProductModal({{ $product->toJson() }})"
-                                            class="px-2 py-1 text-xs bg-blue-500 hover:bg-blue-600 text-white rounded">
-                                            Detail
+                                            class="inline-flex items-center gap-1 px-2 py-1 text-xs bg-blue-500 hover:bg-blue-600 text-white rounded">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                            
                                         </button>
                                     </td>
+
                                 </tr>
                             @empty
                                 <tr>
