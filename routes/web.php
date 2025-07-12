@@ -6,6 +6,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\UserController;
 
 // ==================
 // ROUTE UMUM (Public)
@@ -22,6 +23,12 @@ Route::get('/products-public/{product}', [ProductController::class, 'show'])->na
 // ======================
 // ROUTE YANG BUTUH LOGIN
 // ======================
+
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/users', [UserController::class, 'index'])->name('users.index');
+});
+
 
 Route::middleware('auth')->group(function () {
     // DASHBOARD pribadi (jika memang perlu)

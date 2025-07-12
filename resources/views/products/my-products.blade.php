@@ -21,7 +21,7 @@
 
                 <div class="overflow-x-auto">
                     <table class="min-w-full divide-y divide-gray-200">
-                        <thead class="bg-indigo-600">
+                        <thead class="bg-indigo-500">
                             <tr>
                                 <th class="px-4 py-2 text-left text-xs font-medium text-white uppercase tracking-wider">No</th>
                                 <th class="px-4 py-2 text-left text-xs font-medium text-white uppercase tracking-wider">Nama</th>
@@ -77,7 +77,7 @@
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                     d="M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
                                             </svg>
-                                            
+
                                         </button>
                                     </td>
 
