@@ -34,7 +34,7 @@
             <nav class="space-x-4 hidden md:flex font-bold">
                 <a href="#categories" class="hover:text-indigo-600">Kategori</a>
                 <a href="#products" class="hover:text-indigo-600">Produk</a>
-                <a href="#testimoni" class="hover:text-indigo-600">Testimoni</a>
+                <a href="#feedback" class="hover:text-indigo-600">Feedback</a>
             </nav>
 
             <a href="{{ route('login') }}"
@@ -46,10 +46,23 @@
 
     <!-- Hero -->
     <section class="bg-indigo-100 py-8">
-        <div class="max-w-7xl mx-auto px-4 text-center">
-            <h1 class="text-3xl font-bold text-indigo-800 mb-2">Temukan Barang Bekas Berkualitas</h1>
-            <p class="text-gray-700 font-bold text-sm">Beli barang second dengan harga terbaik dari penjual terpercaya
-            </p>
+        <div class="max-w-7xl mx-auto px-4 flex flex-col-reverse md:flex-row items-center min-h-[400px] gap-6">
+
+            <!-- Teks -->
+            <div class="flex-1 text-center md:text-left">
+                <h1 class="text-4xl font-bold text-indigo-800 mb-4">
+                    Temukan Barang Bekas Berkualitas
+                </h1>
+                <p class="text-gray-700 font-medium text-lg">
+                    Beli barang second dengan harga terbaik dari penjual terpercaya.
+                </p>
+            </div>
+
+            <!-- Gambar -->
+            <div class="flex-1">
+                <img src="{{ asset('images/hero2.png') }}" alt="Hero Image" class="w-full h-auto ">
+            </div>
+
         </div>
     </section>
 
@@ -126,6 +139,21 @@
         {{-- <div class="mt-6">
             {{ $products->links() }}
         </div> --}}
+        <div class="" id="feedback">
+            @if ($randomFeedback)
+                <section class="max-w-7xl mx-auto px-4 py-8">
+                    <div class="bg-indigo-50 text-center p-4 rounded-lg shadow">
+                        <p class="text-gray-700 italic">
+                            “{{ $randomFeedback->message }}”
+                        </p>
+                        <p class="text-sm text-gray-500 mt-2">
+                            - {{ $randomFeedback->name }}
+                        </p>
+                    </div>
+                </section>
+            @endif
+        </div>
+
     </main>
 
     <!-- Modal Detail Produk -->
@@ -188,7 +216,8 @@
 
     <!-- Footer -->
     <footer id="contact" class="bg-indigo-600 text-white mt-12">
-        <div class="max-w-7xl mx-auto px-4 py-6 flex flex-col md:flex-row justify-between items-center space-y-2 md:space-y-0">
+        <div
+            class="max-w-7xl mx-auto px-4 py-6 flex flex-col md:flex-row justify-between items-center space-y-2 md:space-y-0">
             <p>&copy; {{ date('Y') }} JualBarangBekas. All rights reserved.</p>
             <div class="space-x-4">
                 <a href="#" class="hover:underline">Kebijakan Privasi</a>

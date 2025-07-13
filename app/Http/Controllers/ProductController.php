@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use App\Models\Feedback;
 
 class ProductController extends Controller
 {
@@ -19,6 +20,7 @@ class ProductController extends Controller
         // Ambil query dari URL
         $q = $request->query('q');
         $categoryId = $request->query('category');
+        $randomFeedback = Feedback::inRandomOrder()->first();
 
         $productsQuery = Product::with(['category', 'images'])->latest();
 
@@ -35,7 +37,7 @@ class ProductController extends Controller
         // Kirim juga data kategori ke view untuk dropdown
         $categories = Category::all();
 
-        return view('products.show', compact('products', 'q', 'categoryId', 'categories'));
+        return view('products.show', compact('products', 'q', 'categoryId', 'categories', 'randomFeedback'));
     }
 
     public function myProducts(Request $request)

@@ -86,18 +86,22 @@
                 @endif
             </div>
 
-            {{-- Quick Actions --}}
-            <div class="flex flex-col sm:flex-row justify-between gap-3">
-                <a href="{{ route('products.create') }}"
-                    class="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-3 rounded-lg shadow text-center">
-                    Feedback
-                </a>
-            </div>
-
             {{-- Footer --}}
+            @if ($randomFeedback)
+                <div class="bg-indigo-100 text-center p-4 rounded-lg shadow mt-8">
+                    <p class="text-gray-700 italic">
+                        “{{ $randomFeedback->message }}”
+                    </p>
+                    <p class="text-sm text-gray-500 mt-2">
+                        - {{ $randomFeedback->name }}
+                    </p>
+                </div>
+            @endif
+
             <div class="text-center text-sm text-gray-400 mt-12">
                 Terima kasih telah menggunakan aplikasi ini. ✨
             </div>
+
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
