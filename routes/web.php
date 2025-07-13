@@ -19,15 +19,21 @@ Route::get('/', fn() => redirect()->route('products.public.index'));
 Route::get('/products-public', [ProductController::class, 'showAll'])->name('products.public.index');
 Route::get('/products-public/{product}', [ProductController::class, 'show'])->name('products.public.show');
 
+//feedbacks
+Route::post('/feedback', [FeedbackController::class, 'store'])->name('feedback.store');
+Route::get('/admin/feedback', [FeedbackController::class, 'index'])->name('feedback.index');
+Route::patch('/admin/feedback/{feedback}', [FeedbackController::class, 'updateStatus'])->name('feedback.updateStatus');
+
 // ======================
 // ROUTE YANG BUTUH LOGIN
 // ======================
 
-Route::middleware(['auth', 'admin'])->group(function () {});
+Route::middleware(['auth', 'admin'])->group(function () {
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+});
 
 Route::middleware('auth')->group(function () {
     // DASHBOARD pribadi (jika memang perlu)
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     // PROFILE user
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -62,11 +68,6 @@ Route::middleware('auth')->group(function () {
 
         //users
         Route::get('/users', [UserController::class, 'index'])->name('users.index');
-
-        //feedbacks
-        Route::post('/feedback', [FeedbackController::class, 'store'])->name('feedback.store');
-        Route::get('/admin/feedback', [FeedbackController::class, 'index'])->name('feedback.index');
-        Route::patch('/admin/feedback/{feedback}', [FeedbackController::class, 'updateStatus'])->name('feedback.updateStatus');
     });
 });
 

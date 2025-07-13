@@ -32,8 +32,8 @@
             </a>
 
             <nav class="space-x-4 hidden md:flex font-bold">
-                <a href="#categories" class="hover:text-indigo-600">Kategori</a>
-                <a href="#products" class="hover:text-indigo-600">Produk</a>
+                <a href="#categories" class="hover:text-indigo-600">Categories</a>
+                <a href="#products" class="hover:text-indigo-600">Products</a>
                 <a href="#feedback" class="hover:text-indigo-600">Feedback</a>
             </nav>
 
@@ -67,10 +67,10 @@
     </section>
 
     <!-- Section Kategori -->
-    <section id="categories" class="py-12 bg-white">
+    <section id="categories" class="py-12">
         <div class="max-w-7xl mx-auto px-4">
-            <h2 class="text-2xl font-bold text-indigo-600 mb-6">Kategori Populer</h2>
-            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+            <h2 class="text-2xl text-center font-bold text-indigo-600 mb-6">Categories</h2>
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 gap-4">
                 @forelse($categories as $category)
                     <div class="bg-indigo-50 text-center py-4 px-2 rounded shadow hover:bg-indigo-100 transition">
                         <h3 class="text-lg font-semibold text-indigo-700">{{ $category->category_name }}</h3>
@@ -84,7 +84,7 @@
 
     <!-- Produk -->
     <main id="products" class="max-w-7xl mx-auto px-4 py-8">
-        <h2 class="text-xl font-semibold mb-6 text-indigo-600">Temukan Produk yang kamu inginkan</h2>
+        <h2 class="text-2xl text-center font-bold mb-6 text-indigo-600">Products</h2>
 
         <!-- Search Bar -->
         <form method="GET" action="" class="mb-8">
@@ -98,7 +98,7 @@
             </div>
         </form>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-10">
             @forelse ($products as $product)
                 <div class="bg-white rounded-xl shadow-lg hover:shadow-xl transition overflow-hidden flex flex-col cursor-pointer border-2 border-indigo-100 hover:border-indigo-600 min-h-[420px]"
                     @click="selectedProduct = {{ $product->load('category', 'images')->toJson() }}; showDetail = true">
@@ -135,11 +135,42 @@
                 <p class="col-span-full text-gray-500 italic">Tidak ada produk tersedia saat ini.</p>
             @endforelse
         </div>
+
         {{-- Pagination --}}
         {{-- <div class="mt-6">
             {{ $products->links() }}
         </div> --}}
-        <div class="" id="feedback">
+
+        <!-- Feedback Form -->
+            <div class="max-w-7xl mx-auto px-4 mt-16 bg-indigo-50 p-4 rounded-lg shadow" id="feedback">
+                <h2 class="text-2xl font-bold text-indigo-600 mb-6 text-center">Feedback</h2>
+                <form method="POST" action="{{ route('feedback.store') }}" class="space-y-4">
+                    @csrf
+                    <div>
+                        <label for="name" class="block text-sm font-medium text-gray-700">Nama</label>
+                        <input type="text" name="name" id="name" required
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 px-3 py-2">
+                    </div>
+                    <div>
+                        <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+                        <input type="email" name="email" id="email" required
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 px-3 py-2">
+                    </div>
+                    <div>
+                        <label for="message" class="block text-sm font-medium text-gray-700">Pesan</label>
+                        <textarea name="message" id="message" rows="4" required
+                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 px-3 py-2"></textarea>
+                    </div>
+                    <div class="text-right">
+                        <button type="submit"
+                            class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2 rounded-md shadow-sm transition">
+                            Kirim Feedback
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+        <div class="mt-8">
             @if ($randomFeedback)
                 <section class="max-w-7xl mx-auto px-4 py-8">
                     <div class="bg-indigo-50 text-center p-4 rounded-lg shadow">
@@ -167,8 +198,8 @@
                     <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
                         <template x-if="selectedProduct?.images?.length">
                             <template x-for="img in selectedProduct.images" :key="img.id">
-                                <img :src="'/storage/' + img.image_path" class="w-full h-40 object-cover rounded shadow"
-                                    alt="Gambar">
+                                <img :src="'/storage/' + img.image_path"
+                                    class="w-full h-40 object-cover rounded shadow" alt="Gambar">
                             </template>
                         </template>
                         <p x-show="!selectedProduct?.images?.length" class="text-gray-500 italic col-span-full">Tidak
@@ -178,7 +209,8 @@
 
                 <!-- Detail -->
                 <div class="flex-1 bg-white p-6 rounded-lg shadow-lg">
-                    <h3 class="text-xl font-bold text-gray-800 mb-4 border-b pb-2 border-gray-200">Deskripsi Produk</h3>
+                    <h3 class="text-xl font-bold text-gray-800 mb-4 border-b pb-2 border-gray-200">Deskripsi Produk
+                    </h3>
 
                     <p class="text-gray-700 mb-6 whitespace-pre-line" x-text="selectedProduct?.description"></p>
 
@@ -213,6 +245,8 @@
             </div>
         </div>
     </div>
+
+
 
     <!-- Footer -->
     <footer id="contact" class="bg-indigo-600 text-white mt-12">
