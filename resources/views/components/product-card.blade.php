@@ -1,7 +1,9 @@
 @props(['product', 'isOwn' => false])
 
 <div
-    class="border bg-white rounded-xl shadow-lg hover:shadow-xl transition overflow-hidden flex flex-col cursor-pointer border-2 border-indigo-100 hover:border-indigo-600 min-h-[420px]">
+    class="border bg-white rounded-xl shadow-lg hover:shadow-xl transition overflow-hidden flex flex-col cursor-pointer border-2 border-indigo-100 hover:border-indigo-600 min-h-[420px]"
+    @click="selectedProduct = {{ $product->load('category', 'images')->toJson() }}; showDetail = true">
+
     {{-- Gambar Produk --}}
     <div class="w-full h-52 sm:h-64 bg-gray-100 overflow-hidden relative group">
         @if ($product->images->count())
