@@ -12,15 +12,23 @@ return new class extends Migration
     public function up()
 {
     Schema::table('hakim_products', function (Blueprint $table) {
-        $table->string('phone')->nullable()->after('status');
+        if (!Schema::hasColumn('hakim_products', 'phone')) {
+            $table->string('phone');
+        }
     });
 }
 
 public function down()
 {
-    // Schema::table('hakim_products', function (Blueprint $table) {
-    //     $table->dropColumn('phone');
-    // });
+    Schema::table('hakim_products', function (Blueprint $table) {
+        $columns = ['phone'];
+
+            foreach ($columns as $column) {
+                if (Schema::hasColumn('hakim_products', $column)) {
+                    $table->dropColumn($column);
+                }
+            }
+        });
 }
 
 };

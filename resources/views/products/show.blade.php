@@ -49,7 +49,8 @@
         <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
             <a href="{{ route('dashboard') }}" class="flex items-center space-x-1">
                 <span class="text-xl sm:text-2xl font-extrabold text-indigo-600">Jual</span>
-                <span class="text-xl sm:text-2xl font-bold text-gray-800">BarangBekas</span>
+                <span class="text-xl sm:text-2xl font-bold text-gray-800">Barang</span>
+                <span class="text-xl sm:text-2xl font-extrabold text-indigo-600">Bekas</span>
             </a>
             <nav class="space-x-4 hidden md:flex font-bold">
                 <a href="#categories" class="hover:text-indigo-600">Categories</a>
