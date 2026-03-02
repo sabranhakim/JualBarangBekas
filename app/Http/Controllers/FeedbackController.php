@@ -9,6 +9,7 @@ class FeedbackController extends Controller
 {
     public function index()
     {
+        abort_unless(Auth::check() && Auth::user()->role === 'admin', 403);
 
         $feedback = Feedback::latest()->paginate(10);
         return view('feedback.index', compact('feedback'));
@@ -34,6 +35,8 @@ class FeedbackController extends Controller
 
     public function updateStatus(Feedback $feedback)
     {
+        abort_unless(Auth::check() && Auth::user()->role === 'admin', 403);
+
         $feedback->update(['status' => 'dibaca']);
         return back()->with('success', 'Status feedback diperbarui.');
     }

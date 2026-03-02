@@ -4,7 +4,7 @@
         <div class="flex justify-between h-16 items-center">
             <!-- Logo -->
             <div class="shrink-0 flex items-center">
-                <a href="{{ route('dashboard') }}" class="flex items-center space-x-1">
+                <a href="{{ Auth::user()->role === 'admin' ? route('dashboard') : route('marketplace.index') }}" class="flex items-center space-x-1">
                     <span class="text-xl sm:text-2xl font-extrabold text-indigo-600">Jual</span>
                     <span class="text-xl sm:text-2xl font-semibold text-gray-800">BarangBekas</span>
                 </a>
@@ -50,8 +50,20 @@
                         {{ __('Products') }}
                     </x-nav-link>
 
-                    <x-nav-link :href="route('products.my')" :active="request()->routeIs('products.my')">
-                        {{ __('My Products') }}
+                    <x-nav-link :href="route('marketplace.index')" :active="request()->routeIs('marketplace.index') || request()->routeIs('marketplace.checkout')">
+                        {{ __('Marketplace') }}
+                    </x-nav-link>
+
+                    <x-nav-link :href="route('marketplace.transactions')" :active="request()->routeIs('marketplace.transactions')">
+                        {{ __('My Transactions') }}
+                    </x-nav-link>
+
+                    <x-nav-link :href="route('cart.index')" :active="request()->routeIs('cart.index')">
+                        {{ __('Cart') }}
+                    </x-nav-link>
+
+                    <x-nav-link :href="route('favorites.index')" :active="request()->routeIs('favorites.*')">
+                        {{ __('Wishlist') }}
                     </x-nav-link>
                 @endif
 
@@ -119,21 +131,39 @@
     <!-- Mobile Navigation -->
     <div :class="{ 'block': open, 'hidden': !open }" class="sm:hidden hidden">
         <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                {{ __('Dashboard') }}
-            </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('products.index')" :active="request()->routeIs('products.index')">
-                {{ __('Product') }}
-            </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('products.my')" :active="request()->routeIs('products.my')">
-                {{ __('My Product') }}
-            </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('users.index')" :active="request()->routeIs('users.index')">
-                {{ __('Users') }}
-            </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('feedback.index')" :active="request()->routeIs('feedback.index')">
-                {{ __('Feedback') }}
-            </x-responsive-nav-link>
+            @if (Auth::user()->role === 'admin')
+                <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+                    {{ __('Dashboard') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('products.index')" :active="request()->routeIs('products.index')">
+                    {{ __('Product') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('products.my')" :active="request()->routeIs('products.my')">
+                    {{ __('My Product') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('users.index')" :active="request()->routeIs('users.index')">
+                    {{ __('Users') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('feedback.index')" :active="request()->routeIs('feedback.index')">
+                    {{ __('Feedback') }}
+                </x-responsive-nav-link>
+            @else
+                <x-responsive-nav-link :href="route('products.index')" :active="request()->routeIs('products.index')">
+                    {{ __('Product') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('marketplace.index')" :active="request()->routeIs('marketplace.index') || request()->routeIs('marketplace.checkout')">
+                    {{ __('Marketplace') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('marketplace.transactions')" :active="request()->routeIs('marketplace.transactions')">
+                    {{ __('My Transactions') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('cart.index')" :active="request()->routeIs('cart.index')">
+                    {{ __('Cart') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('favorites.index')" :active="request()->routeIs('favorites.*')">
+                    {{ __('Wishlist') }}
+                </x-responsive-nav-link>
+            @endif
 
         </div>
 

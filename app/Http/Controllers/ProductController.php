@@ -56,14 +56,16 @@ class ProductController extends Controller
         return view('products.my-products', compact('products', 'categories'));
     }
 
-    public function show()
+    public function show(Product $product)
     {
-        $products = Product::with(['category', 'images'])
-            ->paginate(12)
-            ->latest()
-            ->get();
+        $product->load(['category', 'images']);
+        $products = collect([$product]);
+        $categories = Category::all();
+        $q = null;
+        $categoryId = null;
+        $randomFeedback = Feedback::inRandomOrder()->first();
 
-        return view('products.show', compact('products'));
+        return view('products.show', compact('products', 'categories', 'q', 'categoryId', 'randomFeedback'));
     }
 
     // Tampilkan semua produk
@@ -214,6 +216,8 @@ class ProductController extends Controller
     // Hapus produk
     public function destroy(Product $product)
     {
+        $this->authorize('delete', $product);
+
         $product->delete();
         return redirect()->route('products.my')->with('success', 'Produk berhasil dihapus.');
     }

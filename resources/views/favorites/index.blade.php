@@ -18,7 +18,7 @@
                 <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
                     @foreach ($favorites as $product)
                         <div class="bg-white rounded-lg shadow hover:shadow-lg transition overflow-hidden flex flex-col">
-                            <a href="{{ route('products.index', $product) }}" class="flex-1">
+                            <a href="{{ route('products.public.show', $product) }}" class="flex-1">
                                 <div class="h-40 bg-gray-100">
                                     @if ($product->images->count())
                                         <img src="{{ asset('storage/' . $product->images->first()->image_path) }}"

@@ -1,57 +1,51 @@
 <x-guest-layout>
-        <div class="max-w-md w-full bg-white rounded-2xl shadow-xl border-t-4 border-indigo-600 p-8 space-y-8">
-            <div class="text-center">
-                <h1 class="text-3xl font-extrabold text-indigo-700 mb-2">Daftar Akun Baru</h1>
-                <p class="text-sm text-gray-500">Buat akunmu sekarang dan mulai berjualan atau membeli.</p>
+    <div class="w-full max-w-md mx-auto space-y-6">
+        <div class="text-center">
+            <p class="inline-flex rounded-full px-3 py-1 text-xs font-bold bg-cyan-100 text-cyan-700 mb-3">Create Account</p>
+            <h1 class="text-3xl font-extrabold text-slate-900">Buat akun baru</h1>
+            <p class="text-sm text-slate-500 mt-2">Daftar untuk mulai menjual atau membeli barang bekas dengan mudah.</p>
+        </div>
+
+        <form method="POST" action="{{ route('register') }}" class="space-y-5">
+            @csrf
+
+            <div>
+                <label for="name" class="block text-sm font-semibold text-slate-700 mb-1.5">Nama</label>
+                <input id="name" type="text" name="name" value="{{ old('name') }}" required autofocus autocomplete="name"
+                    class="w-full rounded-xl border border-slate-200 bg-white px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-cyan-200 focus:border-cyan-500 transition" />
+                <x-input-error :messages="$errors->get('name')" class="mt-1.5 text-sm text-rose-600" />
             </div>
 
-            <form method="POST" action="{{ route('register') }}" class="space-y-5">
-                @csrf
+            <div>
+                <label for="email" class="block text-sm font-semibold text-slate-700 mb-1.5">Email</label>
+                <input id="email" type="email" name="email" value="{{ old('email') }}" required autocomplete="username"
+                    class="w-full rounded-xl border border-slate-200 bg-white px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-cyan-200 focus:border-cyan-500 transition" />
+                <x-input-error :messages="$errors->get('email')" class="mt-1.5 text-sm text-rose-600" />
+            </div>
 
-                <!-- Nama -->
-                <div>
-                    <label for="name" class="block text-sm font-medium text-gray-700">Nama</label>
-                    <input id="name" type="text" name="name" :value="old('name')" required autofocus autocomplete="name"
-                        class="mt-1 w-full px-4 py-2 rounded-lg border border-gray-300 shadow-sm focus:ring-2 focus:ring-indigo-400 focus:outline-none" />
-                    <x-input-error :messages="$errors->get('name')" class="mt-1 text-red-600 text-sm" />
-                </div>
+            <div>
+                <label for="password" class="block text-sm font-semibold text-slate-700 mb-1.5">Password</label>
+                <input id="password" type="password" name="password" required autocomplete="new-password"
+                    class="w-full rounded-xl border border-slate-200 bg-white px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-cyan-200 focus:border-cyan-500 transition" />
+                <x-input-error :messages="$errors->get('password')" class="mt-1.5 text-sm text-rose-600" />
+            </div>
 
-                <!-- Email -->
-                <div>
-                    <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
-                    <input id="email" type="email" name="email" :value="old('email')" required autocomplete="username"
-                        class="mt-1 w-full px-4 py-2 rounded-lg border border-gray-300 shadow-sm focus:ring-2 focus:ring-indigo-400 focus:outline-none" />
-                    <x-input-error :messages="$errors->get('email')" class="mt-1 text-red-600 text-sm" />
-                </div>
+            <div>
+                <label for="password_confirmation" class="block text-sm font-semibold text-slate-700 mb-1.5">Konfirmasi Password</label>
+                <input id="password_confirmation" type="password" name="password_confirmation" required autocomplete="new-password"
+                    class="w-full rounded-xl border border-slate-200 bg-white px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-cyan-200 focus:border-cyan-500 transition" />
+                <x-input-error :messages="$errors->get('password_confirmation')" class="mt-1.5 text-sm text-rose-600" />
+            </div>
 
-                <!-- Password -->
-                <div>
-                    <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
-                    <input id="password" type="password" name="password" required autocomplete="new-password"
-                        class="mt-1 w-full px-4 py-2 rounded-lg border border-gray-300 shadow-sm focus:ring-2 focus:ring-indigo-400 focus:outline-none" />
-                    <x-input-error :messages="$errors->get('password')" class="mt-1 text-red-600 text-sm" />
-                </div>
+            <button type="submit"
+                class="w-full rounded-xl bg-slate-900 hover:bg-cyan-700 text-white font-bold py-2.5 transition shadow-lg shadow-slate-900/15">
+                Daftar
+            </button>
 
-                <!-- Konfirmasi Password -->
-                <div>
-                    <label for="password_confirmation" class="block text-sm font-medium text-gray-700">Konfirmasi Password</label>
-                    <input id="password_confirmation" type="password" name="password_confirmation" required autocomplete="new-password"
-                        class="mt-1 w-full px-4 py-2 rounded-lg border border-gray-300 shadow-sm focus:ring-2 focus:ring-indigo-400 focus:outline-none" />
-                    <x-input-error :messages="$errors->get('password_confirmation')" class="mt-1 text-red-600 text-sm" />
-                </div>
-
-                <!-- Aksi -->
-                <div class="flex flex-col sm:flex-row justify-between items-center gap-4 pt-3">
-                    <a href="{{ route('login') }}"
-                        class="text-sm text-indigo-600 hover:underline hover:text-indigo-800 transition">
-                        Sudah punya akun? <span class="font-semibold">Masuk</span>
-                    </a>
-
-                    <x-primary-button
-                        class="w-full sm:w-auto px-6 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg shadow-sm transition focus:ring-2 focus:ring-indigo-400">
-                        {{ __('Daftar') }}
-                    </x-primary-button>
-                </div>
-            </form>
-        </div>
+            <p class="text-center text-sm text-slate-500">
+                Sudah punya akun?
+                <a href="{{ route('login') }}" class="text-cyan-700 hover:text-cyan-800 font-semibold">Masuk sekarang</a>
+            </p>
+        </form>
+    </div>
 </x-guest-layout>

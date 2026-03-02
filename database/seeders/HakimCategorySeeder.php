@@ -9,11 +9,10 @@ class HakimCategorySeeder extends Seeder
 {
     public function run(): void
     {
-        $categories = ['Elektronik', 'Buku', 'Pakaian', 'Alat Tulis', 'Lainnya'];
+        $categories = ['Elektronik', 'Buku', 'Pakaian', 'Alat Tulis', 'Rumah Tangga', 'Lainnya'];
 
         foreach ($categories as $category) {
-            Category::create(['category_name' => $category]);
+            Category::updateOrCreate(['category_name' => $category], ['category_name' => $category]);
         }
     }
 }
-

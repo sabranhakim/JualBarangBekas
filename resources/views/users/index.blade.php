@@ -1,74 +1,72 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-indigo-800 leading-tight">
-            {{ __('Users') }}
+        <h2 class="font-semibold text-xl text-slate-800 leading-tight">
+            {{ __('Users Management') }}
         </h2>
     </x-slot>
 
     <div class="py-6">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg p-4">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-5">
+            @if (session('error'))
+                <div class="p-4 bg-red-100 border border-red-300 text-red-800 rounded-xl">{{ session('error') }}</div>
+            @endif
 
-                @if (session('error'))
-                    <div class="mb-4 p-4 bg-red-100 border border-red-300 text-red-800 rounded">
-                        {{ session('error') }}
+            @if (session('success'))
+                <div class="p-4 bg-green-100 border border-green-300 text-green-800 rounded-xl">{{ session('success') }}</div>
+            @endif
+
+            <div class="bg-white rounded-2xl shadow border border-slate-100 p-4 sm:p-5">
+                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
+                    <div>
+                        <h3 class="text-lg font-bold text-slate-800">Daftar Pengguna</h3>
+                        <p class="text-sm text-slate-500">Total data: {{ $users->total() }}</p>
                     </div>
-                @endif
 
-                @if (session('success'))
-                    <div class="mb-4 p-4 bg-green-100 border border-green-300 text-green-800 rounded">
-                        {{ session('success') }}
-                    </div>
-                @endif
-
-                {{-- Filter & Search --}}
-                <form method="GET" action="{{ route('users.index') }}" class="mb-6">
-                    <div class="flex flex-col md:flex-row md:items-center gap-3">
-
-                        <div class="flex-1">
-                            <input type="text" name="q" value="{{ request('q') }}"
-                                placeholder="Cari pengguna..."
-                                class="w-full px-4 py-2 rounded-md border border-indigo-300 shadow-sm focus:ring-2 focus:ring-indigo-200 focus:border-indigo-400 text-sm">
+                    <form method="GET" action="{{ route('users.index') }}" class="w-full sm:w-auto sm:min-w-[320px]">
+                        <div class="flex gap-2">
+                            <input type="text" name="q" value="{{ request('q') }}" placeholder="Cari nama atau email..."
+                                class="w-full px-4 py-2 rounded-xl border border-slate-300 focus:ring-2 focus:ring-indigo-200 focus:border-indigo-400 text-sm">
+                            <button type="submit" class="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold">Cari</button>
                         </div>
+                    </form>
+                </div>
 
-                        <button type="submit"
-                            class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm rounded-md shadow-sm transition">
-                            Cari
-                        </button>
-                    </div>
-                </form>
-
-                {{-- Tabel --}}
-                <div class="overflow-x-auto">
-                    <table class="min-w-full bg-white text-sm rounded-lg shadow">
-                        <thead>
-                            <tr class="bg-indigo-500 text-white">
-                                <th class="px-4 py-2 text-left">No</th>
-                                <th class="px-4 py-2 text-left">Nama</th>
-                                <th class="px-4 py-2 text-left">Email</th>
-                                <th class="px-4 py-2 text-left">Role</th>
-                                <th class="px-4 py-2 text-left">Dibuat</th>
+                <div class="overflow-x-auto rounded-xl border border-slate-200">
+                    <table class="min-w-full text-sm bg-white">
+                        <thead class="bg-slate-900 text-white">
+                            <tr>
+                                <th class="px-4 py-3 text-left font-semibold">No</th>
+                                <th class="px-4 py-3 text-left font-semibold">Nama</th>
+                                <th class="px-4 py-3 text-left font-semibold">Email</th>
+                                <th class="px-4 py-3 text-left font-semibold">Role</th>
+                                <th class="px-4 py-3 text-left font-semibold">Dibuat</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody class="divide-y divide-slate-100">
                             @forelse ($users as $index => $user)
-                                <x-user-row :user="$user" :index="$users->firstItem() + $index" />
+                                <tr class="hover:bg-slate-50 transition">
+                                    <td class="px-4 py-3">{{ $users->firstItem() + $index }}</td>
+                                    <td class="px-4 py-3 font-medium text-slate-800">{{ $user->name }}</td>
+                                    <td class="px-4 py-3 text-slate-600">{{ $user->email }}</td>
+                                    <td class="px-4 py-3">
+                                        <span class="px-2.5 py-1 text-xs rounded-full font-semibold {{ $user->role === 'admin' ? 'bg-purple-100 text-purple-700' : 'bg-sky-100 text-sky-700' }}">
+                                            {{ strtoupper($user->role) }}
+                                        </span>
+                                    </td>
+                                    <td class="px-4 py-3 text-slate-500">{{ $user->created_at->format('d M Y') }}</td>
+                                </tr>
                             @empty
                                 <tr>
-                                    <td colspan="5" class="px-4 py-4 text-center text-gray-500 italic">
-                                        Belum ada pengguna.
-                                    </td>
+                                    <td colspan="5" class="px-4 py-8 text-center text-slate-500 italic">Belum ada pengguna.</td>
                                 </tr>
                             @endforelse
                         </tbody>
                     </table>
                 </div>
 
-                {{-- Pagination --}}
-                <div class="mt-6">
+                <div class="mt-5">
                     {{ $users->links() }}
                 </div>
-
             </div>
         </div>
     </div>

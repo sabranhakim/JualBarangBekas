@@ -9,8 +9,25 @@ class Order extends Model
 {
     use HasFactory;
 
+    protected $table = 'hakim_orders';
+
     protected $fillable = [
-        'user_id', 'receiver_name', 'phone', 'address', 'note', 'status'
+        'user_id',
+        'receiver_name',
+        'phone',
+        'address',
+        'note',
+        'status',
+        'payment_gateway',
+        'payment_reference',
+        'payment_url',
+        'paid_at',
+        'payment_payload',
+    ];
+
+    protected $casts = [
+        'paid_at' => 'datetime',
+        'payment_payload' => 'array',
     ];
 
     public function user()
@@ -23,4 +40,3 @@ class Order extends Model
         return $this->hasMany(OrderItem::class, 'order_id');
     }
 }
-
